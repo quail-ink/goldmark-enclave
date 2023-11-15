@@ -34,18 +34,29 @@ This [goldmark](http://github.com/yuin/goldmark) extension uses Markdown's image
 And then you can use it like this:
 
 ```md
+Youtube Video:
+
 ![](https://youtu.be/dQw4w9WgXcQ?si=0kalBBLQpIXT1Wcd)
-```
 
-```md
+Bilibili Video:
+
 ![](https://www.bilibili.com/video/BV1uT4y1P7CX)
-```
 
-```md
+Twitter Tweet:
+
 ![](https://twitter.com/NASA/status/1704954156149084293)
+
+TradingView Chart:
+
+![](https://www.tradingview.com/chart/AA0aBB8c/?symbol=BITFINEX%3ABTCUSD)
 ```
 
-### Installation
+## Options
+
+- `theme`: The theme of the TradingView chart and twitter tweet. Default: `light`
+  - e.g. `![](https://twitter.com/NASA/status/1704954156149084293?theme=dark)`
+
+## Installation
 
 ```bash
 go get github.com/quail.ink/goldmark-enclave
