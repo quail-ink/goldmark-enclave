@@ -3,6 +3,7 @@ package enclave
 import (
 	"fmt"
 	"net/url"
+	"regexp"
 	"strings"
 
 	"github.com/yuin/goldmark/ast"
@@ -72,6 +73,17 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 			oid = u.Query().Get("symbol")
 			theme = u.Query().Get("theme")
 
+		} else if u.Host == "quail.ink" || u.Host == "dev.quail.ink" {
+			// https://quail.ink/{list_slug}
+			const re = `^([a-zA-Z0-9_-]+)$`
+			if len(u.Path) > 1 {
+				p := strings.Trim(u.Path[1:], "/")
+				if ok, _ := regexp.MatchString(re, p); ok {
+					provider = EnclaveProviderQuail
+					oid = string(img.Destination)
+					theme = u.Query().Get("theme")
+				}
+			}
 		} else {
 			a.InsertFailedHint(n, fmt.Sprintf("unsupported object: %s", img.Destination))
 			return ast.WalkContinue, nil

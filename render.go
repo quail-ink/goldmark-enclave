@@ -3,6 +3,8 @@ package enclave
 import (
 	"fmt"
 
+	"github.com/quail-ink/goldmark-enclave/object"
+
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/util"
@@ -31,19 +33,27 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 	case EnclaveProviderBilibili:
 		w.Write([]byte(`<div class="enclave-object-wrapper"><iframe class="enclave-object bilibili-enclave-object" width="100%" height="400" src="//player.bilibili.com/player.html?bvid=` + enc.ObjectID + `&page=1" scrolling="no" border="0" framespacing="0" allowfullscreen="true" frameborder="no"></iframe></div>`))
 	case EnclaveProviderTwitter:
-		html, err := GetTweetOembedHtml(enc.ObjectID, enc.Theme)
+		html, err := object.GetTweetOembedHtml(enc.ObjectID, enc.Theme)
 		if err != nil || html == "" {
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object twitter-enclave-object normal-object error">Failed to load tweet from %s</div></div>`, enc.ObjectID)
 		} else {
-			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object twitter-enclave-object normal-object">%s</div></div>`, html)
+			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object twitter-enclave-object normal-object no-border">%s</div></div>`, html)
 		}
 		w.Write([]byte(html))
 	case EnclaveProviderTradingView:
-		html, err := GetTraddingViewWidgetHtml(enc.ObjectID, enc.Theme)
+		html, err := object.GetTradingViewWidgetHtml(enc.ObjectID, enc.Theme)
 		if err != nil || html == "" {
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object tradingview-enclave-object error">Failed to load tradingview chart from %s</div></div>`, enc.ObjectID)
 		} else {
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper auto-resize"><div class="enclave-object tradingview-enclave-object no-border">%s</div></div>`, html)
+		}
+		w.Write([]byte(html))
+	case EnclaveProviderQuail:
+		html, err := object.GetQuailWidgetHtml(enc.ObjectID, enc.Theme)
+		if err != nil || html == "" {
+			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object quail-enclave-object error">Failed to load quail widget from %s</div></div>`, enc.ObjectID)
+		} else {
+			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object quail-enclave-object normal-object">%s</div></div>`, html)
 		}
 		w.Write([]byte(html))
 	}

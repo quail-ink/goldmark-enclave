@@ -1,4 +1,4 @@
-package enclave
+package object
 
 import (
 	"context"
