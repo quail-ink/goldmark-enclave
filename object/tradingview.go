@@ -1,4 +1,4 @@
-package enclave
+package object
 
 import (
 	"bytes"
@@ -7,7 +7,7 @@ import (
 	"text/template"
 )
 
-const tpl = `
+const TradingViewtpl = `
 <!-- TradingView Widget BEGIN -->
 <div class="tradingview-widget-container" style="height:100%;width:100%">
   <div id="{{.ID}}" style="height:calc(100% - 32px);width:100%"></div>
@@ -33,7 +33,7 @@ const tpl = `
 <!-- TradingView Widget END -->
 `
 
-func GetTraddingViewWidgetHtml(symbol, theme string) (string, error) {
+func GetTradingViewWidgetHtml(symbol, theme string) (string, error) {
 	if theme == "dark" {
 		theme = "dark"
 	} else {
@@ -42,7 +42,7 @@ func GetTraddingViewWidgetHtml(symbol, theme string) (string, error) {
 
 	id := fmt.Sprintf("tradingview_%d", rand.Intn(1000))
 
-	t, err := template.New("tradingview").Parse(tpl)
+	t, err := template.New("tradingview").Parse(TradingViewtpl)
 	if err != nil {
 		return "", err
 	}

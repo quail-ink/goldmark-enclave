@@ -17,6 +17,7 @@ const (
 	EnclaveProviderBilibili    = "bilibili"
 	EnclaveProviderTwitter     = "twitter"
 	EnclaveProviderTradingView = "tradingview"
+	EnclaveProviderQuail       = "quail"
 )
 
 func New(opts ...Option) goldmark.Extender {
