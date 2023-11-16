@@ -73,12 +73,15 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 			oid = u.Query().Get("symbol")
 			theme = u.Query().Get("theme")
 
-		} else if u.Host == "quail.ink" {
-			// https://quail.ink/{list_slug}
-			const re = `^([a-zA-Z0-9_-]+)$`
+		} else if u.Host == "quail.ink" || u.Host == "dev.quail.ink" {
+			// https://quail.ink/{list_slug} or https://quail.ink/{list_slug}/p/{post_slug}
+			const re1 = `^([a-zA-Z0-9_-]+)$`
+			const re2 = `^([a-zA-Z0-9_-]+)/p/([a-zA-Z0-9_-]+)$`
 			if len(u.Path) > 1 {
 				p := strings.Trim(u.Path[1:], "/")
-				if ok, _ := regexp.MatchString(re, p); ok {
+				ok1, _ := regexp.MatchString(re1, p)
+				ok2, _ := regexp.MatchString(re2, p)
+				if ok1 || ok2 {
 					provider = EnclaveProviderQuail
 					oid = string(img.Destination)
 					theme = u.Query().Get("theme")
@@ -93,6 +96,7 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 			ev := NewEnclave(
 				&Enclave{
 					Image:    *img,
+					URL:      u,
 					Provider: provider,
 					ObjectID: oid,
 					Theme:    theme,

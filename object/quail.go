@@ -3,10 +3,11 @@ package object
 import (
 	"bytes"
 	"fmt"
+	"net/url"
 	"text/template"
 )
 
-const quailListTpl = `
+const quailTpl = `
 <iframe
 	src="{{.URL}}"
 	data-theme="{{.Theme}}"
@@ -19,21 +20,21 @@ const quailListTpl = `
 ></iframe>
 `
 
-func GetQuailWidgetHtml(url, theme string) (string, error) {
+func GetQuailWidgetHtml(url *url.URL, theme string) (string, error) {
 	if theme == "dark" {
 		theme = "dark"
 	} else {
 		theme = "light"
 	}
 
-	t, err := template.New("quail-list").Parse(quailListTpl)
+	t, err := template.New("quail").Parse(quailTpl)
 	if err != nil {
 		return "", err
 	}
 
 	buf := bytes.Buffer{}
 	if err = t.Execute(&buf, map[string]string{
-		"URL":   fmt.Sprintf("%s/widget", url),
+		"URL":   fmt.Sprintf("%s://%s%s/widget#theme=%s", url.Scheme, url.Host, url.Path, theme),
 		"Theme": theme,
 	}); err != nil {
 		return "", err

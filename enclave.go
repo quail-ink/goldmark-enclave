@@ -1,6 +1,8 @@
 package enclave
 
 import (
+	"net/url"
+
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
@@ -43,6 +45,7 @@ func (e *enclaveExtension) Extend(m goldmark.Markdown) {
 
 type Enclave struct {
 	ast.Image
+	URL      *url.URL
 	Provider string
 	ObjectID string
 	Theme    string

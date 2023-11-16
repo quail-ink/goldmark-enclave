@@ -8,10 +8,10 @@ This [goldmark](http://github.com/yuin/goldmark) extension uses Markdown's image
 - [x] [Bilibili](https://bilibili.com) Video
 - [x] X(formly Twitter)'s Tweet Oembed Widget
 - [x] [TradingView](https://tradingview.com) Chart
+- [x] [Quail](https://quail.ink) List and Article
 
 ## Planned Objects
 
-- [ ] [Quail](https://quail.ink) List and Article
 - [ ] [Discord](https://discord.com) Server Widget
 - [ ] Add options to resize and position images
 
@@ -53,7 +53,7 @@ TradingView Chart:
 
 ## Options
 
-- `theme`: The theme of the TradingView chart and twitter tweet. Default: `light`
+- `theme`: The theme of the TradingView chart, twitter tweet and quail widget. Default: `light`
   - e.g. `![](https://twitter.com/NASA/status/1704954156149084293?theme=dark)`
 
 ## Installation
