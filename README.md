@@ -49,6 +49,12 @@ Twitter Tweet:
 TradingView Chart:
 
 ![](https://www.tradingview.com/chart/AA0aBB8c/?symbol=BITFINEX%3ABTCUSD)
+
+Quail List and Post
+
+![](https://quail.ink/blog)
+
+![](https://quail.ink/blog/p/extended-markdown-syntax?theme=dark)
 ```
 
 ## Demo
