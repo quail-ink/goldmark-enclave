@@ -17,7 +17,7 @@ const quailTpl = `
 	height="{{.Height}}px"
 	title="Quail Widget"
 	frameborder="0"
-	allow="accelerometer; autoplay; clipboard-write; gyroscope; web-share"
+	allow="web-share"
 	allowfullscreen
 ></iframe>
 `
