@@ -51,6 +51,10 @@ TradingView Chart:
 ![](https://www.tradingview.com/chart/AA0aBB8c/?symbol=BITFINEX%3ABTCUSD)
 ```
 
+## Demo
+
+[Live Demo](https://quail.ink/blog/p/extended-markdown-syntax)
+
 ## Options
 
 - `theme`: The theme of the TradingView chart, twitter tweet and quail widget. Default: `light`
