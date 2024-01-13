@@ -19,7 +19,8 @@ const (
 	EnclaveProviderBilibili    = "bilibili"
 	EnclaveProviderTwitter     = "twitter"
 	EnclaveProviderTradingView = "tradingview"
-	EnclaveProviderQuail       = "quail"
+	EnclaveProviderQuailWidget = "quail-widget"
+	EnclaveProviderQuailImage  = "quail-image"
 )
 
 func New(opts ...Option) goldmark.Extender {
@@ -49,6 +50,7 @@ type Enclave struct {
 	Provider string
 	ObjectID string
 	Theme    string
+	Params   map[string]string
 }
 
 var KindEnclave = ast.NewNodeKind("Enclave")

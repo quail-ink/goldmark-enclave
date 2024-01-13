@@ -48,12 +48,18 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper auto-resize"><div class="enclave-object tradingview-enclave-object no-border">%s</div></div>`, html)
 		}
 		w.Write([]byte(html))
-	case EnclaveProviderQuail:
+	case EnclaveProviderQuailWidget:
 		html, err := object.GetQuailWidgetHtml(enc.URL, enc.Theme)
 		if err != nil || html == "" {
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object quail-enclave-object error">Failed to load quail widget from %s</div></div>`, enc.ObjectID)
 		} else {
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object quail-enclave-object normal-object no-border">%s</div></div>`, html)
+		}
+		w.Write([]byte(html))
+	case EnclaveProviderQuailImage:
+		html, err := object.GetQuailImageHtml(enc.URL, enc.Params)
+		if err != nil || html == "" {
+			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object quail-enclave-object error">Failed to load quail image from %s</div></div>`, enc.ObjectID)
 		}
 		w.Write([]byte(html))
 	}

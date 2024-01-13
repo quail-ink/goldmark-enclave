@@ -41,6 +41,7 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 		oid := ""
 		theme := "light"
 		provider := ""
+		params := map[string]string{}
 		if u.Host == "www.youtube.com" && u.Path == "/watch" {
 			// this is a youtube video: https://www.youtube.com/watch?v={vid}
 			provider = EnclaveProviderYouTube
@@ -82,14 +83,38 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 				ok1, _ := regexp.MatchString(re1, p)
 				ok2, _ := regexp.MatchString(re2, p)
 				if ok1 || ok2 {
-					provider = EnclaveProviderQuail
+					provider = EnclaveProviderQuailWidget
 					oid = string(img.Destination)
 					theme = u.Query().Get("theme")
 				}
 			}
 		} else {
-			a.InsertFailedHint(n, fmt.Sprintf("unsupported object: %s", img.Destination))
-			return ast.WalkContinue, nil
+			title := string(img.Title)
+			w := u.Query().Get("w")
+			if w == "" {
+				w = u.Query().Get("width")
+			}
+			h := u.Query().Get("h")
+			if h == "" {
+				h = u.Query().Get("height")
+			}
+			if len(title) != 0 || w != "" || h != "" {
+				// this is a normal image, but it has a title, so we add a caption
+				provider = EnclaveProviderQuailImage
+				oid = string(img.Destination)
+				if title != "" {
+					params["title"] = string(img.Title)
+				}
+				if w != "" {
+					params["width"] = w
+				}
+				if h != "" {
+					params["height"] = h
+				}
+			} else {
+				a.InsertFailedHint(n, fmt.Sprintf("regular image: %s", img.Destination))
+				return ast.WalkContinue, nil
+			}
 		}
 
 		if oid != "" {
@@ -100,6 +125,7 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 					Provider: provider,
 					ObjectID: oid,
 					Theme:    theme,
+					Params:   params,
 				})
 			n.Parent().ReplaceChild(n.Parent(), n, ev)
 		}

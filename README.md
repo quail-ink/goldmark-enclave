@@ -9,11 +9,11 @@ This [goldmark](http://github.com/yuin/goldmark) extension uses Markdown's image
 - [x] X(formly Twitter)'s Tweet Oembed Widget
 - [x] [TradingView](https://tradingview.com) Chart
 - [x] [Quail](https://quail.ink) List and Article
+- [x] Add options to images
 
 ## Planned Objects
 
 - [ ] [Discord](https://discord.com) Server Widget
-- [ ] Add options to resize and position images
 
 ## Usage
 
@@ -55,6 +55,11 @@ Quail List and Post
 ![](https://quail.ink/blog)
 
 ![](https://quail.ink/blog/p/extended-markdown-syntax?theme=dark)
+
+Image with caption and giving it a width:
+
+![](https://your-image.com/image.png?w=100px "This is a caption")
+
 ```
 
 ## Demo
@@ -65,6 +70,8 @@ Quail List and Post
 
 - `theme`: The theme of the TradingView chart, twitter tweet and quail widget. Default: `light`
   - e.g. `![](https://twitter.com/NASA/status/1704954156149084293?theme=dark)`
+- `width` / `w` and `height` / `h`: The width and height of images. Default: `auto`
+  - e.g. `![](https://your-image.com/image.png?w=100px)`
 
 ## Installation
 
