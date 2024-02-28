@@ -97,9 +97,7 @@ func (r *hrefRenderer) renderHref(w util.BufWriter, source []byte, node ast.Node
 
 	_, _ = w.Write(tag)
 
-	if isLink {
-		_, _ = w.Write([]byte(title))
-	} else {
+	if !isLink {
 		_, _ = w.Write([]byte(dst))
 	}
 	return ast.WalkContinue, nil
