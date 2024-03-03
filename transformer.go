@@ -111,9 +111,13 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 				if h != "" {
 					params["height"] = h
 				}
+				// } else {
+				// use a default image title
+				// a.InsertFailedHint(n, fmt.Sprintf("regular image: %s", img.Destination))
+				// return ast.WalkContinue, nil
 			} else {
-				a.InsertFailedHint(n, fmt.Sprintf("regular image: %s", img.Destination))
-				return ast.WalkContinue, nil
+				provider = EnclaveRegularImage
+				oid = string(img.Destination)
 			}
 		}
 

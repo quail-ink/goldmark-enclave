@@ -10,9 +10,16 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
-type Option func(*enclaveExtension)
+type (
+	Option           func(*enclaveExtension)
+	enclaveExtension struct {
+		cfg *Config
+	}
 
-type enclaveExtension struct{}
+	Config struct {
+		DefaultImageAltPrefix string
+	}
+)
 
 const (
 	EnclaveProviderYouTube     = "youtube"
@@ -21,12 +28,12 @@ const (
 	EnclaveProviderTradingView = "tradingview"
 	EnclaveProviderQuailWidget = "quail-widget"
 	EnclaveProviderQuailImage  = "quail-image"
+	EnclaveRegularImage        = "regular-image"
 )
 
-func New(opts ...Option) goldmark.Extender {
-	e := &enclaveExtension{}
-	for _, opt := range opts {
-		opt(e)
+func New(cfg *Config) goldmark.Extender {
+	e := &enclaveExtension{
+		cfg: cfg,
 	}
 	return e
 }
@@ -39,7 +46,7 @@ func (e *enclaveExtension) Extend(m goldmark.Markdown) {
 	)
 	m.Renderer().AddOptions(
 		renderer.WithNodeRenderers(
-			util.Prioritized(NewHTMLRenderer(), 500),
+			util.Prioritized(NewHTMLRenderer(e.cfg), 500),
 		),
 	)
 }

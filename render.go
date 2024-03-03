@@ -10,10 +10,12 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
-type HTMLRenderer struct{}
+type HTMLRenderer struct {
+	cfg *Config
+}
 
-func NewHTMLRenderer() renderer.NodeRenderer {
-	r := &HTMLRenderer{}
+func NewHTMLRenderer(cfg *Config) renderer.NodeRenderer {
+	r := &HTMLRenderer{cfg: cfg}
 	return r
 }
 
@@ -62,6 +64,14 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object quail-enclave-object error">Failed to load quail image from %s</div></div>`, enc.ObjectID)
 		}
 		w.Write([]byte(html))
+	case EnclaveRegularImage:
+		alt := ""
+		if len(enc.Title) != 0 {
+			alt = fmt.Sprintf("An image to describe %s", enc.Title)
+		} else {
+			alt = fmt.Sprintf("An image to describe post %s", r.cfg.DefaultImageAltPrefix)
+		}
+		w.Write([]byte(fmt.Sprintf(`<img src="%s" alt="%s" />`, enc.URL.String(), alt)))
 	}
 
 	return ast.WalkContinue, nil
