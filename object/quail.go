@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"net/url"
-	"strconv"
 	"strings"
 	"text/template"
 )
@@ -14,7 +13,7 @@ const quailWidgetTpl = `
 	src="{{.URL}}"
 	data-theme="{{.Theme}}"
 	width="100%"
-	height="{{.Height}}px"
+	height="{{.Height}}"
 	title="Quail Widget"
 	frameborder="0"
 	allow="web-share"
@@ -29,7 +28,7 @@ const quailImageTpl = `
 </div>
 `
 
-func GetQuailWidgetHtml(url *url.URL, theme string) (string, error) {
+func GetQuailWidgetHtml(url *url.URL, theme string, params map[string]string) (string, error) {
 	if theme == "dark" {
 		theme = "dark"
 	} else {
@@ -41,16 +40,26 @@ func GetQuailWidgetHtml(url *url.URL, theme string) (string, error) {
 		return "", err
 	}
 
-	height := 96
-	if strings.Contains(url.Path, "/p/") {
-		height = 128
+	layout := ""
+	if l, ok := params["layout"]; ok {
+		layout = l
 	}
+
+	height := "auto"
+	if strings.Contains(url.Path, "/p/") {
+		height = "128px"
+	} else if layout == "subscribe_form" {
+		height = "390px"
+	} else if layout == "subscribe_form_mini" {
+		height = "142px"
+	}
+
 
 	buf := bytes.Buffer{}
 	if err = t.Execute(&buf, map[string]string{
-		"URL":    fmt.Sprintf("%s://%s%s/widget?theme=%s", url.Scheme, url.Host, url.Path, theme),
+		"URL":    fmt.Sprintf("%s://%s%s/widget?theme=%s&layout=%s&logged=ignore", url.Scheme, url.Host, url.Path, theme, layout),
 		"Theme":  theme,
-		"Height": strconv.Itoa(height),
+		"Height": height,
 	}); err != nil {
 		return "", err
 	}

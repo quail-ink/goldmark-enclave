@@ -86,6 +86,7 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 					provider = EnclaveProviderQuailWidget
 					oid = string(img.Destination)
 					theme = u.Query().Get("theme")
+					params["layout"] = u.Query().Get("layout")
 				}
 			}
 		} else {
