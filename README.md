@@ -1,8 +1,14 @@
 # goldmark-enclave
 
-This [goldmark](http://github.com/yuin/goldmark) extension uses Markdown's image syntax  `![]()` to support other objects.
+This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syntax:
 
-## Supported Objects
+- uses Markdown's image syntax  `![]()` to support other objects.
+- add highlight syntax for inline text.
+- add title to links
+
+## Embeded Objects
+
+### Supported Objects
 
 - [x] [YouTube](https://youtube.com) Video
 - [x] [Bilibili](https://bilibili.com) Video
@@ -11,24 +17,23 @@ This [goldmark](http://github.com/yuin/goldmark) extension uses Markdown's image
 - [x] [Quail](https://quail.ink) List and Article
 - [x] Add options to images
 
-## Planned Objects
+### Planned Objects
 
 - [ ] [Discord](https://discord.com) Server Widget
 
-## Usage
+### Usage
 
 ```go
-  markdown := goldmark.New(
-    goldmark.WithExtensions(
-      enclave.New(),
-    ),
-  )
-  var buf bytes.Buffer
-  if err := markdown.Convert([]byte(source), &buf); err != nil {
-    panic(err)
-  }
-  fmt.Print(buf)
-}
+import (
+  enclave "github.com/quail-ink/goldmark-enclave"
+	"github.com/yuin/goldmark"
+)
+// ...
+markdown := goldmark.New(
+  goldmark.WithExtensions(
+    enclave.New(),
+  ),
+)
 ```
 
 And then you can use it like this:
@@ -62,16 +67,74 @@ Image with caption and giving it a width:
 
 ```
 
-## Demo
-
-[Live Demo](https://quail.ink/blog/p/extended-markdown-syntax)
-
-## Options
+### Options
 
 - `theme`: The theme of the TradingView chart, twitter tweet and quail widget. Default: `light`
   - e.g. `![](https://twitter.com/NASA/status/1704954156149084293?theme=dark)`
 - `width` / `w` and `height` / `h`: The width and height of images. Default: `auto`
   - e.g. `![](https://your-image.com/image.png?w=100px)`
+
+## Highlight Text
+
+### Usage
+
+
+```go
+import (
+  enclaveMark "github.com/quail-ink/goldmark-enclave/mark"
+	"github.com/yuin/goldmark"
+)
+// ...
+markdown := goldmark.New(
+  goldmark.WithExtensions(
+    enclaveMark.New(),
+  ),
+)
+```
+
+```md
+This is a ==highlighted text==.
+```
+
+will be rendered as:
+
+```html
+<p>This is a <mark>highlighted text</mark>.</p>
+```
+
+## Title to Links
+
+### Usage
+
+```go
+import (
+  enclaveHref "github.com/quail-ink/goldmark-enclave/href"
+	"github.com/yuin/goldmark"
+)
+// ...
+markdown := goldmark.New(
+  goldmark.WithExtensions(
+    enclaveHref.New(&enclaveHref.Config{
+      InternalLinkBase: "https://quail.ink",
+    }),
+  ),
+)
+```
+
+```md
+[Quail](/blog "Quail Blog")
+```
+
+will be rendered as:
+
+```html
+<a href="https://quail.ink/blog" title="Quail Blog">Quail</a>
+```
+
+## Demo
+
+[Live Demo](https://quail.ink/blog/p/extended-markdown-syntax)
+
 
 ## Installation
 
