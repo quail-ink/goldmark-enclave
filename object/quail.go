@@ -22,8 +22,8 @@ const quailWidgetTpl = `
 `
 
 const quailImageTpl = `
-<div class="quail-image-wrapper" style="width: {{.Width}}; height: {{.Height}}">
-	<img src="{{.URL}}" alt="{{.Title}}" style="width: {{.Width}}; height: {{.Height}}" class="quail-image" />
+<div class="quail-image-wrapper" style="width: {{.Width}}; height: {{.Height}}; margin-bottom: 1rem">
+	<img src="{{.URL}}" alt="{{.Alt}}" style="width: {{.Width}}; height: {{.Height}}" class="quail-image" />
 	<div class="quail-image-caption">{{.Title}}</div>
 </div>
 `
@@ -53,7 +53,6 @@ func GetQuailWidgetHtml(url *url.URL, theme string, params map[string]string) (s
 	} else if layout == "subscribe_form_mini" {
 		height = "142px"
 	}
-
 
 	buf := bytes.Buffer{}
 	if err = t.Execute(&buf, map[string]string{
@@ -89,11 +88,17 @@ func GetQuailImageHtml(url *url.URL, params map[string]string) (string, error) {
 		title = t
 	}
 
+	alt := ""
+	if t, ok := params["alt"]; ok {
+		alt = t
+	}
+
 	if err = t.Execute(&buf, map[string]string{
 		"URL":    url.String(),
 		"Title":  title,
 		"Width":  w,
 		"Height": h,
+		"Alt":    alt,
 	}); err != nil {
 		return "", err
 	}

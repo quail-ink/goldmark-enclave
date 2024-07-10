@@ -15,6 +15,9 @@ type astTransformer struct{}
 
 var defaultASTTransformer = &astTransformer{}
 
+var imgLeftNode ast.Node
+var imgLeftParentNode ast.Node
+
 func (a *astTransformer) InsertFailedHint(n ast.Node, msg string) {
 	msgNode := ast.NewString([]byte(fmt.Sprintf("\n<!-- goldmark-enclave: %s -->\n", msg)))
 	msgNode.SetCode(true)
@@ -28,6 +31,10 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 		}
 
 		if n.Kind() != ast.KindImage {
+			if n.Kind() == ast.KindParagraph {
+				imgLeftNode = n
+				imgLeftParentNode = n.Parent()
+			}
 			return ast.WalkContinue, nil
 		}
 
@@ -112,10 +119,6 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 				if h != "" {
 					params["height"] = h
 				}
-				// } else {
-				// use a default image title
-				// a.InsertFailedHint(n, fmt.Sprintf("regular image: %s", img.Destination))
-				// return ast.WalkContinue, nil
 			} else {
 				provider = EnclaveRegularImage
 				oid = string(img.Destination)
@@ -132,7 +135,14 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 					Theme:    theme,
 					Params:   params,
 				})
-			n.Parent().ReplaceChild(n.Parent(), n, ev)
+
+			// if the outter node is a paragraph node, replace the whole paragraph.
+			// because we can not put div in a p tag
+			if imgLeftNode != nil && imgLeftNode.Kind() == ast.KindParagraph && imgLeftParentNode != nil {
+				imgLeftParentNode.ReplaceChild(imgLeftParentNode, imgLeftNode, ev)
+			} else {
+				n.Parent().ReplaceChild(n.Parent(), n, ev)
+			}
 		}
 
 		return ast.WalkContinue, nil

@@ -20,6 +20,12 @@ func NewHTMLRenderer(cfg *Config) renderer.NodeRenderer {
 }
 
 func (r *HTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
+	// image with alt like [alt](url "title") will generate a node seq like
+	// layout:
+	// - imgLeftNode: kind = paragraph, content = alt
+	// - imgNode: kind = image
+	// - imgRightNode: kind = text, content = alt
+	// I don't know how to handle them yet.
 	reg.Register(KindEnclave, r.renderEnclave)
 }
 
@@ -59,19 +65,31 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 		}
 		w.Write([]byte(html))
 	case EnclaveProviderQuailImage:
+		alt := string(node.Text(source))
+		if alt == "" && len(enc.Title) != 0 {
+			alt = fmt.Sprintf("An image to describe %s", enc.Title)
+		}
+		if alt == "" {
+			alt = "An image to describe post"
+		}
+		enc.Params["alt"] = alt
 		html, err := object.GetQuailImageHtml(enc.URL, enc.Params)
 		if err != nil || html == "" {
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object quail-enclave-object error">Failed to load quail image from %s</div></div>`, enc.ObjectID)
 		}
+		fmt.Printf("quail image html: %+v\n", html)
 		w.Write([]byte(html))
 	case EnclaveRegularImage:
-		alt := ""
-		if len(enc.Title) != 0 {
+		alt := string(node.Text(source))
+		if alt == "" && len(enc.Title) != 0 {
 			alt = fmt.Sprintf("An image to describe %s", enc.Title)
-		} else {
-			alt = fmt.Sprintf("An image to describe post %s", r.cfg.DefaultImageAltPrefix)
 		}
-		w.Write([]byte(fmt.Sprintf(`<img src="%s" alt="%s" />`, enc.URL.String(), alt)))
+		if alt == "" {
+			alt = "An image to describe post"
+		}
+		html := fmt.Sprintf(`<img src="%s" alt="%s" />`, enc.URL.String(), alt)
+		fmt.Printf("regular image html: %+v\n", html)
+		w.Write([]byte(html))
 	}
 
 	return ast.WalkContinue, nil
