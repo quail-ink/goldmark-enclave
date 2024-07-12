@@ -26,9 +26,12 @@ func (a *astTransformer) InsertFailedHint(n ast.Node, msg string) {
 
 func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc parser.Context) {
 	replaceImages := func(n ast.Node, entering bool) (ast.WalkStatus, error) {
+		fmt.Printf("1 n.Kind(): %v\n", n.Kind())
 		if !entering {
 			return ast.WalkContinue, nil
 		}
+
+		fmt.Printf("2 n.Kind(): %v\n", n.Kind())
 
 		if n.Kind() != ast.KindImage {
 			if n.Kind() == ast.KindParagraph {
@@ -138,11 +141,13 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 
 			// if the outter node is a paragraph node, replace the whole paragraph.
 			// because we can not put div in a p tag
-			if imgLeftNode != nil && imgLeftNode.Kind() == ast.KindParagraph && imgLeftParentNode != nil {
-				imgLeftParentNode.ReplaceChild(imgLeftParentNode, imgLeftNode, ev)
-			} else {
-				n.Parent().ReplaceChild(n.Parent(), n, ev)
-			}
+			// if imgLeftNode != nil && imgLeftNode.Kind() == ast.KindParagraph && imgLeftParentNode != nil {
+			// 	imgLeftParentNode.ReplaceChild(imgLeftParentNode, n, ev)
+			// 	imgLeftNode = nil
+			// 	imgLeftParentNode = nil
+			// } else {
+			n.Parent().ReplaceChild(n.Parent(), n, ev)
+			// }
 		}
 
 		return ast.WalkContinue, nil

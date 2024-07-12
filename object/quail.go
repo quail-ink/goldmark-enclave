@@ -22,10 +22,10 @@ const quailWidgetTpl = `
 `
 
 const quailImageTpl = `
-<div class="quail-image-wrapper" style="width: {{.Width}}; height: {{.Height}}; margin-bottom: 1rem">
+<span class="quail-image-wrapper" style="width: {{.Width}}; height: {{.Height}}; margin: 1rem 0; display: block">
 	<img src="{{.URL}}" alt="{{.Alt}}" style="width: {{.Width}}; height: {{.Height}}" class="quail-image" />
-	<div class="quail-image-caption">{{.Title}}</div>
-</div>
+	<span class="quail-image-caption" style="display: block">{{.Title}}</span>
+</span>
 `
 
 func GetQuailWidgetHtml(url *url.URL, theme string, params map[string]string) (string, error) {

@@ -77,7 +77,6 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 		if err != nil || html == "" {
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object quail-enclave-object error">Failed to load quail image from %s</div></div>`, enc.ObjectID)
 		}
-		fmt.Printf("quail image html: %+v\n", html)
 		w.Write([]byte(html))
 	case EnclaveRegularImage:
 		alt := string(node.Text(source))
