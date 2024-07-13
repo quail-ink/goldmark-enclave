@@ -87,7 +87,6 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 			alt = "An image to describe post"
 		}
 		html := fmt.Sprintf(`<img src="%s" alt="%s" />`, enc.URL.String(), alt)
-		fmt.Printf("regular image html: %+v\n", html)
 		w.Write([]byte(html))
 	}
 

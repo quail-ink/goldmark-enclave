@@ -26,12 +26,9 @@ func (a *astTransformer) InsertFailedHint(n ast.Node, msg string) {
 
 func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc parser.Context) {
 	replaceImages := func(n ast.Node, entering bool) (ast.WalkStatus, error) {
-		fmt.Printf("1 n.Kind(): %v\n", n.Kind())
 		if !entering {
 			return ast.WalkContinue, nil
 		}
-
-		fmt.Printf("2 n.Kind(): %v\n", n.Kind())
 
 		if n.Kind() != ast.KindImage {
 			if n.Kind() == ast.KindParagraph {
