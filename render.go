@@ -38,8 +38,10 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 	switch enc.Provider {
 	case EnclaveProviderYouTube:
 		w.Write([]byte(`<div class="enclave-object-wrapper"><iframe class="enclave-object youtube-enclave-object" width="100%" height="400" src="https://www.youtube.com/embed/` + enc.ObjectID + `" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`))
+
 	case EnclaveProviderBilibili:
 		w.Write([]byte(`<div class="enclave-object-wrapper"><iframe class="enclave-object bilibili-enclave-object" width="100%" height="400" src="//player.bilibili.com/player.html?bvid=` + enc.ObjectID + `&page=1" scrolling="no" border="0" framespacing="0" allowfullscreen="true" frameborder="no"></iframe></div>`))
+
 	case EnclaveProviderTwitter:
 		html, err := object.GetTweetOembedHtml(enc.ObjectID, enc.Theme)
 		if err != nil || html == "" {
@@ -48,6 +50,7 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object twitter-enclave-object normal-object no-border">%s</div></div>`, html)
 		}
 		w.Write([]byte(html))
+
 	case EnclaveProviderTradingView:
 		html, err := object.GetTradingViewWidgetHtml(enc.ObjectID, enc.Theme)
 		if err != nil || html == "" {
@@ -56,6 +59,16 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper auto-resize"><div class="enclave-object tradingview-enclave-object no-border">%s</div></div>`, html)
 		}
 		w.Write([]byte(html))
+
+	case EnclaveProviderDifyWidget:
+		html, err := object.GetDifyWidgetHtml(enc.URL)
+		if err != nil || html == "" {
+			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object dify-enclave-object error">Failed to load dify widget from %s</div></div>`, enc.ObjectID)
+		} else {
+			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object dify-enclave-object normal-object no-border">%s</div></div>`, html)
+		}
+		w.Write([]byte(html))
+
 	case EnclaveProviderQuailWidget:
 		html, err := object.GetQuailWidgetHtml(enc.URL, enc.Theme, enc.Params)
 		if err != nil || html == "" {
@@ -64,6 +77,7 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object quail-enclave-object normal-object no-border">%s</div></div>`, html)
 		}
 		w.Write([]byte(html))
+
 	case EnclaveProviderQuailImage:
 		alt := string(node.Text(source))
 		if alt == "" && len(enc.Title) != 0 {
@@ -78,6 +92,7 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object quail-enclave-object error">Failed to load quail image from %s</div></div>`, enc.ObjectID)
 		}
 		w.Write([]byte(html))
+
 	case EnclaveRegularImage:
 		alt := string(node.Text(source))
 		if alt == "" && len(enc.Title) != 0 {

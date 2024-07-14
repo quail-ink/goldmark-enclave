@@ -26,6 +26,7 @@ const (
 	EnclaveProviderBilibili    = "bilibili"
 	EnclaveProviderTwitter     = "twitter"
 	EnclaveProviderTradingView = "tradingview"
+	EnclaveProviderDifyWidget          = "dify-widget"
 	EnclaveProviderQuailWidget = "quail-widget"
 	EnclaveProviderQuailImage  = "quail-image"
 	EnclaveRegularImage        = "regular-image"

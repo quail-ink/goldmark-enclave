@@ -81,6 +81,11 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 			oid = u.Query().Get("symbol")
 			theme = u.Query().Get("theme")
 
+		} else if u.Host == "udify.app" {
+			// https://udify.app/chatbot/1NaVTsaJ1t54UrNE
+			provider = EnclaveProviderDifyWidget
+			oid = string(img.Destination)
+
 		} else if u.Host == "quail.ink" || u.Host == "dev.quail.ink" {
 			// https://quail.ink/{list_slug} or https://quail.ink/{list_slug}/p/{post_slug}
 			const re1 = `^([a-zA-Z0-9_-]+)$`
