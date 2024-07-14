@@ -16,6 +16,7 @@ This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syn
 - [x] [TradingView](https://tradingview.com) Chart
 - [x] [Quail](https://quail.ink) List and Article
 - [x] Add options to images
+- [x] [dify.ai](https://dify.ai) Widget
 
 ### Planned Objects
 
@@ -64,6 +65,10 @@ Quail List and Post
 Image with caption and giving it a width:
 
 ![](https://your-image.com/image.png?w=100px "This is a caption")
+
+Dify Widget
+
+![](https://udify.app/chatbot/1NaVTsaJ1t54UrNE)
 
 ```
 
