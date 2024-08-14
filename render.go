@@ -61,7 +61,7 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 		w.Write([]byte(html))
 
 	case EnclaveProviderDifyWidget:
-		html, err := object.GetDifyWidgetHtml(enc.URL)
+		html, err := object.GetDifyWidgetHtml(enc.ObjectID)
 		if err != nil || html == "" {
 			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object dify-enclave-object error">Failed to load dify widget from %s</div></div>`, enc.ObjectID)
 		} else {

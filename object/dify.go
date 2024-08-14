@@ -2,7 +2,6 @@ package object
 
 import (
 	"bytes"
-	"net/url"
 	"text/template"
 )
 
@@ -15,7 +14,7 @@ const difyWidgetTpl = `
 	</iframe>
 `
 
-func GetDifyWidgetHtml(url *url.URL) (string, error) {
+func GetDifyWidgetHtml(url string) (string, error) {
 	t, err := template.New("dify-widget").Parse(difyWidgetTpl)
 	if err != nil {
 		return "", err
@@ -23,7 +22,7 @@ func GetDifyWidgetHtml(url *url.URL) (string, error) {
 
 	buf := bytes.Buffer{}
 	if err = t.Execute(&buf, map[string]string{
-		"URL": url.String(),
+		"URL": url,
 	}); err != nil {
 		return "", err
 	}
