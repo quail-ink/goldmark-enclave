@@ -26,7 +26,7 @@ This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syn
 
 ```go
 import (
-  enclave "github.com/quail-ink/goldmark-enclave"
+  enclave "github.com/lixvyang/goldmark-enclave"
 	"github.com/yuin/goldmark"
 )
 // ...
@@ -86,7 +86,7 @@ Dify Widget
 
 ```go
 import (
-  enclaveMark "github.com/quail-ink/goldmark-enclave/mark"
+  enclaveMark "github.com/lixvyang/goldmark-enclave/mark"
 	"github.com/yuin/goldmark"
 )
 // ...
@@ -113,7 +113,7 @@ will be rendered as:
 
 ```go
 import (
-  enclaveHref "github.com/quail-ink/goldmark-enclave/href"
+  enclaveHref "github.com/lixvyang/goldmark-enclave/href"
 	"github.com/yuin/goldmark"
 )
 // ...

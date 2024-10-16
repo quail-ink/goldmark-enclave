@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/quail-ink/goldmark-enclave/helper"
+	"github.com/lixvyang/goldmark-enclave/helper"
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
