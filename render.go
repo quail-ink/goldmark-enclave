@@ -40,7 +40,7 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 		w.Write([]byte(`<div class="enclave-object-wrapper"><iframe class="enclave-object youtube-enclave-object" width="100%" height="400" src="https://www.youtube.com/embed/` + enc.ObjectID + `" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`))
 
 	case EnclaveProviderBilibili:
-		w.Write([]byte(`<div class="enclave-object-wrapper"><iframe class="enclave-object bilibili-enclave-object" width="100%" height="400" src="//player.bilibili.com/player.html?bvid=` + enc.ObjectID + `&page=1" scrolling="no" border="0" framespacing="0" allowfullscreen="true" frameborder="no"></iframe></div>`))
+		w.Write([]byte(`<div class="enclave-object-wrapper"><iframe class="enclave-object bilibili-enclave-object" width="100%" height="400" src="//player.bilibili.com/player.html?bvid=` + enc.ObjectID + `&page=1&autoplay=0&poster=1" scrolling="no" border="0" framespacing="0" allowfullscreen="true" frameborder="no"></iframe></div>`))
 
 	case EnclaveProviderTwitter:
 		html, err := object.GetTweetOembedHtml(enc.ObjectID, enc.Theme)
