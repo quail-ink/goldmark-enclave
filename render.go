@@ -36,6 +36,13 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 
 	enc := node.(*Enclave)
 	switch enc.Provider {
+	case EnclaveProviderMixinDiscuss:
+		html, err := object.GetDiscussWidgetHtml(enc.ObjectID)
+		if err != nil || html == "" {
+			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object mixin-enclave-object error">Failed to load mixin discuss widget from %s</div></div>`, enc.ObjectID)
+		}
+		w.Write([]byte(html))
+
 	case EnclaveProviderYouTube:
 		w.Write([]byte(`<div class="enclave-object-wrapper"><iframe class="enclave-object youtube-enclave-object" width="100%" height="400" src="https://www.youtube.com/embed/` + enc.ObjectID + `" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`))
 

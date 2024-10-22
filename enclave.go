@@ -22,14 +22,15 @@ type (
 )
 
 const (
-	EnclaveProviderYouTube     = "youtube"
-	EnclaveProviderBilibili    = "bilibili"
-	EnclaveProviderTwitter     = "twitter"
-	EnclaveProviderTradingView = "tradingview"
-	EnclaveProviderDifyWidget          = "dify-widget"
-	EnclaveProviderQuailWidget = "quail-widget"
-	EnclaveProviderQuailImage  = "quail-image"
-	EnclaveRegularImage        = "regular-image"
+	EnclaveProviderMixinDiscuss = "mixin-discuss"
+	EnclaveProviderYouTube      = "youtube"
+	EnclaveProviderBilibili     = "bilibili"
+	EnclaveProviderTwitter      = "twitter"
+	EnclaveProviderTradingView  = "tradingview"
+	EnclaveProviderDifyWidget   = "dify-widget"
+	EnclaveProviderQuailWidget  = "quail-widget"
+	EnclaveProviderQuailImage   = "quail-image"
+	EnclaveRegularImage         = "regular-image"
 )
 
 func New(cfg *Config) goldmark.Extender {
