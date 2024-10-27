@@ -6,6 +6,8 @@ import (
 	"net/url"
 	"strings"
 	"text/template"
+
+	"github.com/quail-ink/goldmark-enclave/core"
 )
 
 const quailWidgetTpl = `
@@ -28,42 +30,54 @@ const quailImageTpl = `
 </span>
 `
 
-func GetQuailWidgetHtml(url *url.URL, theme string, params map[string]string) (string, error) {
-	if theme == "dark" {
-		theme = "dark"
+func GetQuailWidgetHtml(enc *core.Enclave) (string, error) {
+	if enc.Theme == "dark" {
+		enc.Theme = "dark"
 	} else {
-		theme = "light"
+		enc.Theme = "light"
 	}
+	var err error
 
-	t, err := template.New("quail-widget").Parse(quailWidgetTpl)
-	if err != nil {
-		return "", err
-	}
-
-	layout := ""
-	if l, ok := params["layout"]; ok {
-		layout = l
-	}
-
-	height := "auto"
-	if strings.Contains(url.Path, "/p/") {
-		height = "128px"
-	} else if layout == "subscribe_form" {
-		height = "390px"
-	} else if layout == "subscribe_form_mini" {
-		height = "142px"
-	}
-
+	ret := ""
 	buf := bytes.Buffer{}
-	if err = t.Execute(&buf, map[string]string{
-		"URL":    fmt.Sprintf("%s://%s%s/widget?theme=%s&layout=%s&logged=ignore", url.Scheme, url.Host, url.Path, theme, layout),
-		"Theme":  theme,
-		"Height": height,
-	}); err != nil {
-		return "", err
+	if enc.IframeDisabled {
+		ret, err = GetNoIframeTplHtml(enc, fmt.Sprintf("%s://%s%s", enc.URL.Scheme, enc.URL.Host, enc.URL.Path))
+		if err != nil {
+			return "", err
+		}
+
+	} else {
+		t, err := template.New("quail-widget").Parse(quailWidgetTpl)
+		if err != nil {
+			return "", err
+		}
+
+		layout := ""
+		if l, ok := enc.Params["layout"]; ok {
+			layout = l
+		}
+
+		height := "auto"
+		if strings.Contains(enc.URL.Path, "/p/") {
+			height = "128px"
+		} else if layout == "subscribe_form" {
+			height = "390px"
+		} else if layout == "subscribe_form_mini" {
+			height = "142px"
+		}
+
+		if err = t.Execute(&buf, map[string]string{
+			"URL":    fmt.Sprintf("%s://%s%s/widget?theme=%s&layout=%s&logged=ignore", enc.URL.Scheme, enc.URL.Host, enc.URL.Path, enc.Theme, layout),
+			"Theme":  enc.Theme,
+			"Height": height,
+		}); err != nil {
+			return "", err
+		}
+
+		ret = buf.String()
 	}
 
-	return buf.String(), nil
+	return ret, nil
 }
 
 func GetQuailImageHtml(url *url.URL, params map[string]string) (string, error) {

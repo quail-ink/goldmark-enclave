@@ -6,14 +6,15 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/quail-ink/goldmark-enclave/core"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/text"
 )
 
-type astTransformer struct{}
-
-var defaultASTTransformer = &astTransformer{}
+type astTransformer struct {
+	cfg *core.Config
+}
 
 var imgLeftNode ast.Node
 var imgLeftParentNode ast.Node
@@ -51,23 +52,23 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 		params := map[string]string{}
 		if u.Host == "www.youtube.com" && u.Path == "/watch" {
 			// this is a youtube video: https://www.youtube.com/watch?v={vid}
-			provider = EnclaveProviderYouTube
+			provider = core.EnclaveProviderYouTube
 			oid = u.Query().Get("v")
 		} else if u.Host == "youtu.be" {
 			// this is also a youtube video: https://youtu.be/{vid}
-			provider = EnclaveProviderYouTube
+			provider = core.EnclaveProviderYouTube
 			oid = u.Path[1:]
 			oid = strings.Trim(oid, "/")
 
 		} else if u.Host == "www.bilibili.com" && strings.HasPrefix(u.Path, "/video/") {
 			// this is a bilibili video: https://www.bilibili.com/video/{vid}
-			provider = EnclaveProviderBilibili
+			provider = core.EnclaveProviderBilibili
 			oid = u.Path[7:]
 			oid = strings.Trim(oid, "/")
 
 		} else if u.Host == "twitter.com" || u.Host == "m.twitter.com" || u.Host == "x.com" {
 			// https://twitter.com/{username}/status/{id number}?theme=dark
-			provider = EnclaveProviderTwitter
+			provider = core.EnclaveProviderTwitter
 			oid = string(img.Destination)
 			if u.Host == "x.com" {
 				// replace x.com with twitter.com, because x.com doesn't support using x.com as the source host, what a shame
@@ -77,7 +78,7 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 
 		} else if u.Host == "tradingview.com" || u.Host == "www.tradingview.com" {
 			// https://www.tradingview.com/chart/UC0wWW9o/?symbol=BITFINEX%3ABTCUSD
-			provider = EnclaveProviderTradingView
+			provider = core.EnclaveProviderTradingView
 			oid = u.Query().Get("symbol")
 			theme = u.Query().Get("theme")
 
@@ -85,7 +86,7 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 			// https://udify.app/chatbot/1NaVTsaJ1t54UrNE
 			// or
 			// dify://udify.app/chatbot/1NaVTsaJ1t54UrNE
-			provider = EnclaveProviderDifyWidget
+			provider = core.EnclaveProviderDifyWidget
 			if u.Scheme == "dify" {
 				oid = fmt.Sprintf("https://%s", u.Host+u.Path)
 			} else {
@@ -101,7 +102,7 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 				ok1, _ := regexp.MatchString(re1, p)
 				ok2, _ := regexp.MatchString(re2, p)
 				if ok1 || ok2 {
-					provider = EnclaveProviderQuailWidget
+					provider = core.EnclaveProviderQuailWidget
 					oid = string(img.Destination)
 					theme = u.Query().Get("theme")
 					params["layout"] = u.Query().Get("layout")
@@ -119,7 +120,7 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 			}
 			if len(title) != 0 || w != "" || h != "" {
 				// this is a normal image, but it has a title, so we add a caption
-				provider = EnclaveProviderQuailImage
+				provider = core.EnclaveProviderQuailImage
 				oid = string(img.Destination)
 				if title != "" {
 					params["title"] = string(img.Title)
@@ -131,20 +132,21 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 					params["height"] = h
 				}
 			} else {
-				provider = EnclaveRegularImage
+				provider = core.EnclaveRegularImage
 				oid = string(img.Destination)
 			}
 		}
 
 		if oid != "" {
 			ev := NewEnclave(
-				&Enclave{
-					Image:    *img,
-					URL:      u,
-					Provider: provider,
-					ObjectID: oid,
-					Theme:    theme,
-					Params:   params,
+				&core.Enclave{
+					Image:          *img,
+					URL:            u,
+					Provider:       provider,
+					ObjectID:       oid,
+					Theme:          theme,
+					Params:         params,
+					IframeDisabled: a.cfg.IframeDisabled,
 				})
 
 			// if the outter node is a paragraph node, replace the whole paragraph.

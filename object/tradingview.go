@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"math/rand"
 	"text/template"
+
+	"github.com/quail-ink/goldmark-enclave/core"
 )
 
 const TradingViewtpl = `
@@ -33,7 +35,8 @@ const TradingViewtpl = `
 <!-- TradingView Widget END -->
 `
 
-func GetTradingViewWidgetHtml(symbol, theme string) (string, error) {
+func GetTradingViewWidgetHtml(enc *core.Enclave) (string, error) {
+	theme := enc.Theme
 	if theme == "dark" {
 		theme = "dark"
 	} else {
@@ -42,19 +45,30 @@ func GetTradingViewWidgetHtml(symbol, theme string) (string, error) {
 
 	id := fmt.Sprintf("tradingview_%d", rand.Intn(1000))
 
-	t, err := template.New("tradingview").Parse(TradingViewtpl)
-	if err != nil {
-		return "", err
+	var err error
+	ret := ""
+	if enc.IframeDisabled {
+		ret, err = GetNoIframeTplHtml(enc, string(enc.Image.Destination))
+		if err != nil {
+			return "", err
+		}
+
+	} else {
+		t, err := template.New("tradingview").Parse(TradingViewtpl)
+		if err != nil {
+			return "", err
+		}
+
+		buf := bytes.Buffer{}
+		if err = t.Execute(&buf, map[string]string{
+			"ID":     id,
+			"Symbol": enc.ObjectID,
+			"Theme":  theme,
+		}); err != nil {
+			return "", err
+		}
+		ret = buf.String()
 	}
 
-	buf := bytes.Buffer{}
-	if err = t.Execute(&buf, map[string]string{
-		"ID":     id,
-		"Symbol": symbol,
-		"Theme":  theme,
-	}); err != nil {
-		return "", err
-	}
-
-	return buf.String(), nil
+	return ret, nil
 }
