@@ -53,7 +53,7 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 			// this is a youtube video: https://www.youtube.com/watch?v={vid}
 			provider = EnclaveProviderYouTube
 			oid = u.Query().Get("v")
-		} else if strings.Contains(u.String(), "mixin") {
+		} else if strings.Contains(u.String(), "uploads.discuss.mixin.one") {
 			provider = EnclaveProviderMixinDiscuss
 		} else if strings.Contains(u.String(), "betxin") {
 			provider = EnclaveProviderMixinDiscuss
