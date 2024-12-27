@@ -2,7 +2,7 @@
 
 This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syntax:
 
-- uses Markdown's image syntax  `![]()` to support other objects.
+- uses Markdown's image syntax `![]()` to support other objects.
 - add highlight syntax for inline text.
 - add title to links
 
@@ -14,7 +14,7 @@ This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syn
 - [x] [Bilibili](https://bilibili.com) Video
 - [x] X(formly Twitter)'s Tweet Oembed Widget
 - [x] [TradingView](https://tradingview.com) Chart
-- [x] [Quail](https://quail.ink) List and Article
+- [x] [Quaily](https://quaily.com) List and Article
 - [x] Add options to images
 - [x] [dify.ai](https://dify.ai) Widget
 
@@ -58,9 +58,9 @@ TradingView Chart:
 
 Quail List and Post
 
-![](https://quail.ink/blog)
+![](https://quaily.com/blog)
 
-![](https://quail.ink/blog/p/extended-markdown-syntax?theme=dark)
+![](https://quaily.com/blog/p/extended-markdown-syntax?theme=dark)
 
 Image with caption and giving it a width:
 
@@ -69,7 +69,6 @@ Image with caption and giving it a width:
 Dify Widget
 
 ![](https://udify.app/chatbot/1NaVTsaJ1t54UrNE)
-
 ```
 
 ### Options
@@ -82,7 +81,6 @@ Dify Widget
 ## Highlight Text
 
 ### Usage
-
 
 ```go
 import (
@@ -120,7 +118,7 @@ import (
 markdown := goldmark.New(
   goldmark.WithExtensions(
     enclaveHref.New(&enclaveHref.Config{
-      InternalLinkBase: "https://quail.ink",
+      InternalLinkBase: "https://quaily.com",
     }),
   ),
 )
@@ -133,16 +131,15 @@ markdown := goldmark.New(
 will be rendered as:
 
 ```html
-<a href="https://quail.ink/blog" title="Quail Blog">Quail</a>
+<a href="https://quaily.com/blog" title="Quail Blog">Quail</a>
 ```
 
 ## Demo
 
-[Live Demo](https://quail.ink/blog/p/extended-markdown-syntax)
-
+[Live Demo](https://quaily.com/blog/p/extended-markdown-syntax)
 
 ## Installation
 
 ```bash
-go get github.com/quail.ink/goldmark-enclave
+go get github.com/quail-ink/goldmark-enclave
 ```

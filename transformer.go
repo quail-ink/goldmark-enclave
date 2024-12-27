@@ -93,8 +93,8 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 				oid = string(img.Destination)
 			}
 
-		} else if u.Host == "quail.ink" || u.Host == "dev.quail.ink" {
-			// https://quail.ink/{list_slug} or https://quail.ink/{list_slug}/p/{post_slug}
+		} else if u.Host == "quail.ink" || u.Host == "dev.quail.ink" || u.Host == "quaily.com" {
+			// https://quaily.com/{list_slug} or https://quaily.com/{list_slug}/p/{post_slug}
 			const re1 = `^([a-zA-Z0-9_-]+)$`
 			const re2 = `^([a-zA-Z0-9_-]+)/p/([a-zA-Z0-9_-]+)$`
 			if len(u.Path) > 1 {
