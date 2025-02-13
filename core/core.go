@@ -15,6 +15,7 @@ const (
 	EnclaveProviderQuailWidget = "quail-widget"
 	EnclaveProviderQuailImage  = "quail-image"
 	EnclaveRegularImage        = "regular-image"
+	EnclaveHtml5Audio          = "html5-audio"
 )
 
 const (

@@ -132,6 +132,15 @@ func (r *HTMLRenderer) renderEnclave(w util.BufWriter, source []byte, node ast.N
 		}
 		html := fmt.Sprintf(`<img src="%s" alt="%s" />`, enc.URL.String(), alt)
 		w.Write([]byte(html))
+
+	case core.EnclaveHtml5Audio:
+		html, err := object.GetAudioHtml(enc)
+		if err != nil || html == "" {
+			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object audio-enclave-object error">Failed to load audio from %s</div></div>`, enc.ObjectID)
+		} else {
+			html = fmt.Sprintf(`<div class="enclave-object-wrapper normal-wrapper"><div class="enclave-object audio-enclave-object normal-object no-border">%s</div></div>`, html)
+		}
+		w.Write([]byte(html))
 	}
 
 	return ast.WalkContinue, nil

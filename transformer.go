@@ -108,6 +108,10 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 					params["layout"] = u.Query().Get("layout")
 				}
 			}
+		} else if strings.HasSuffix(strings.ToLower(u.Path), ".mp3") {
+			// this is a mp3 file
+			provider = core.EnclaveHtml5Audio
+			oid = string(img.Destination)
 		} else {
 			title := string(img.Title)
 			w := u.Query().Get("w")
