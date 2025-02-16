@@ -7,7 +7,9 @@ import (
 	"github.com/quail-ink/goldmark-enclave/core"
 )
 
-const audioTpl = `<audio controls src="{{.URL}}"></audio>`
+const audioTpl = `<div class="enclave-audio-wrapper flex place-center">
+<audio controls src="{{.URL}}"></audio>
+</div>`
 
 func GetAudioHtml(enc *core.Enclave) (string, error) {
 	var err error
