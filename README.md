@@ -6,6 +6,10 @@ This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syn
 - add highlight syntax for inline text.
 - add title to links
 
+## Full Demo
+
+[Live Demo](https://quaily.com/blog/p/extended-markdown-syntax)
+
 ## Embeded Objects
 
 ### Supported Objects
@@ -17,6 +21,8 @@ This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syn
 - [x] [Quaily](https://quaily.com) List and Article
 - [x] Add options to images
 - [x] [dify.ai](https://dify.ai) Widget
+- [x] [Spotify](https://spotify.com) Embed
+- [x] html5 audio 
 
 ### Planned Objects
 
@@ -26,7 +32,7 @@ This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syn
 
 ```go
 import (
-  enclave "github.com/quail-ink/goldmark-enclave"
+  enclave "github.com/quailyquaily/goldmark-enclave"
 	"github.com/yuin/goldmark"
 )
 // ...
@@ -69,11 +75,21 @@ Image with caption and giving it a width:
 Dify Widget
 
 ![](https://udify.app/chatbot/1NaVTsaJ1t54UrNE)
+
+Spotify Embed
+
+![](https://open.spotify.com/track/5vdp5UmvTsnMEMESIF2Ym7?si=d4ee09bfd0e941c5)
+
+HTML5 Audio
+
+![](https://cdn1.suno.ai/fc991b95-e4e9-4c8f-87e8-e5e4560755e7.mp3)
 ```
 
-### Options
+### Some Options
 
-- `theme`: The theme of the TradingView chart, twitter tweet and quail widget. Default: `light`
+Some objects support options:
+
+- `theme`: The theme of the TradingView chart, twitter tweet and quaily widget. Default: `light`
   - e.g. `![](https://twitter.com/NASA/status/1704954156149084293?theme=dark)`
 - `width` / `w` and `height` / `h`: The width and height of images. Default: `auto`
   - e.g. `![](https://your-image.com/image.png?w=100px)`
@@ -84,7 +100,7 @@ Dify Widget
 
 ```go
 import (
-  enclaveMark "github.com/quail-ink/goldmark-enclave/mark"
+  enclaveMark "github.com/quailyquaily/goldmark-enclave/mark"
 	"github.com/yuin/goldmark"
 )
 // ...
@@ -111,7 +127,7 @@ will be rendered as:
 
 ```go
 import (
-  enclaveHref "github.com/quail-ink/goldmark-enclave/href"
+  enclaveHref "github.com/quailyquaily/goldmark-enclave/href"
 	"github.com/yuin/goldmark"
 )
 // ...
@@ -134,12 +150,8 @@ will be rendered as:
 <a href="https://quaily.com/blog" title="Quail Blog">Quail</a>
 ```
 
-## Demo
-
-[Live Demo](https://quaily.com/blog/p/extended-markdown-syntax)
-
 ## Installation
 
 ```bash
-go get github.com/quail-ink/goldmark-enclave
+go get github.com/quailyquaily/goldmark-enclave
 ```
