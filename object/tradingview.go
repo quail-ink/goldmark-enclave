@@ -9,7 +9,7 @@ import (
 	"github.com/quail-ink/goldmark-enclave/core"
 )
 
-const TradingViewtpl = `
+const TradingViewTpl = `
 <!-- TradingView Widget BEGIN -->
 <div class="tradingview-widget-container" style="height:100%;width:100%">
   <div id="{{.ID}}" style="height:calc(100% - 32px);width:100%"></div>
@@ -54,7 +54,7 @@ func GetTradingViewWidgetHtml(enc *core.Enclave) (string, error) {
 		}
 
 	} else {
-		t, err := template.New("tradingview").Parse(TradingViewtpl)
+		t, err := template.New("tradingview").Parse(TradingViewTpl)
 		if err != nil {
 			return "", err
 		}

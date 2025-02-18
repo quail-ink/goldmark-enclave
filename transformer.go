@@ -108,10 +108,25 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 					params["layout"] = u.Query().Get("layout")
 				}
 			}
+
+		} else if u.Host == "open.spotify.com" {
+			// https://open.spotify.com/track/5vdp5UmvTsnMEMESIF2Ym7?si=d4ee09bfd0e941c5
+			const re = `^track/([a-zA-Z0-9_-]+)$`
+			provider = core.EnclaveProviderSpotify
+			if len(u.Path) > 1 {
+				p := strings.Trim(u.Path[1:], "/")
+				// get the track id after /track/
+				ok, _ := regexp.MatchString(re, p)
+				if ok {
+					oid = strings.Split(p, "/")[1]
+				}
+			}
+
 		} else if strings.HasSuffix(strings.ToLower(u.Path), ".mp3") {
 			// this is a mp3 file
 			provider = core.EnclaveHtml5Audio
 			oid = string(img.Destination)
+
 		} else {
 			title := string(img.Title)
 			w := u.Query().Get("w")

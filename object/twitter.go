@@ -23,7 +23,7 @@ func GetTweetOembedHtml(url, theme string) (string, error) {
 		theme = "light"
 	}
 
-	oembedUrl := fmt.Sprintf("https://publish.twitter.com/oembed?url=%s&theme=%s", url, theme)
+	oembedUrl := fmt.Sprintf("https://publish.x.com/oembed?url=%s&theme=%s", url, theme)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
