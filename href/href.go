@@ -3,7 +3,6 @@ package href
 import (
 	"fmt"
 	"net/url"
-	"strings"
 
 	"github.com/quail-ink/goldmark-enclave/helper"
 
@@ -21,7 +20,6 @@ type (
 		cfg *Config
 	}
 	Config struct {
-		InternalLinkBase string
 	}
 )
 
@@ -84,14 +82,9 @@ func (r *hrefRenderer) renderHref(w util.BufWriter, source []byte, node ast.Node
 		return ast.WalkContinue, nil
 	}
 
-	rel := []string{}
-	if !strings.HasPrefix(dst, r.cfg.InternalLinkBase) {
-		rel = []string{"rel", "nofollow"}
-	}
 	attrs := [][]string{
 		{"href", dst},
 		{"title", title},
-		rel,
 	}
 	tag := helper.HTMLTag("a", attrs)
 

@@ -22,7 +22,7 @@ This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syn
 - [x] Add options to images
 - [x] [dify.ai](https://dify.ai) Widget
 - [x] [Spotify](https://spotify.com) Embed
-- [x] html5 audio 
+- [x] html5 audio
 
 ### Planned Objects
 
@@ -133,9 +133,7 @@ import (
 // ...
 markdown := goldmark.New(
   goldmark.WithExtensions(
-    enclaveHref.New(&enclaveHref.Config{
-      InternalLinkBase: "https://quaily.com",
-    }),
+    enclaveHref.New(&enclaveHref.Config{}),
   ),
 )
 ```
