@@ -3,6 +3,7 @@ package href
 import (
 	"fmt"
 	"net/url"
+	"strings"
 
 	"github.com/quail-ink/goldmark-enclave/helper"
 
@@ -20,6 +21,8 @@ type (
 		cfg *Config
 	}
 	Config struct {
+		NoFollowByDefault bool
+		DoFollowDomains   []string
 	}
 )
 
@@ -82,9 +85,17 @@ func (r *hrefRenderer) renderHref(w util.BufWriter, source []byte, node ast.Node
 		return ast.WalkContinue, nil
 	}
 
+	rel := []string{"rel", "noopener"}
+	if r.cfg.NoFollowByDefault {
+		rel = []string{"rel", "noopener ugc nofollow"}
+		if r.shouldFollowLink(dst) {
+			rel = []string{"rel", "noopener"}
+		}
+	}
 	attrs := [][]string{
 		{"href", dst},
 		{"title", title},
+		rel,
 	}
 	tag := helper.HTMLTag("a", attrs)
 
@@ -94,4 +105,20 @@ func (r *hrefRenderer) renderHref(w util.BufWriter, source []byte, node ast.Node
 		_, _ = w.Write([]byte(dst))
 	}
 	return ast.WalkContinue, nil
+}
+
+func (r *hrefRenderer) shouldFollowLink(link string) bool {
+	if len(r.cfg.DoFollowDomains) == 0 {
+		return false
+	}
+	u, err := url.Parse(link)
+	if err != nil {
+		return false
+	}
+	for _, domain := range r.cfg.DoFollowDomains {
+		if strings.EqualFold(u.Host, domain) {
+			return true
+		}
+	}
+	return false
 }
