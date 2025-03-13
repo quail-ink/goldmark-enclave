@@ -3,8 +3,8 @@ package enclave
 import (
 	"fmt"
 
-	"github.com/quail-ink/goldmark-enclave/core"
-	"github.com/quail-ink/goldmark-enclave/object"
+	"github.com/quailyquaily/goldmark-enclave/core"
+	"github.com/quailyquaily/goldmark-enclave/object"
 
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/renderer"

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"text/template"
 
-	"github.com/quail-ink/goldmark-enclave/core"
+	"github.com/quailyquaily/goldmark-enclave/core"
 )
 
 const NoIframeTpl = `

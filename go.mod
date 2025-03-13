@@ -1,4 +1,4 @@
-module github.com/quail-ink/goldmark-enclave
+module github.com/quailyquaily/goldmark-enclave
 
 go 1.21
 

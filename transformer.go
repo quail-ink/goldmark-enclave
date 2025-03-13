@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/quail-ink/goldmark-enclave/core"
+	"github.com/quailyquaily/goldmark-enclave/core"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/text"

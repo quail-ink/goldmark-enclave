@@ -1,7 +1,7 @@
 package enclave
 
 import (
-	"github.com/quail-ink/goldmark-enclave/core"
+	"github.com/quailyquaily/goldmark-enclave/core"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer"
