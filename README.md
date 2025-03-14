@@ -3,8 +3,10 @@
 This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syntax:
 
 - uses Markdown's image syntax `![]()` to support other objects.
-- add highlight syntax for inline text.
-- add title to links
+- adds highlight syntax for inline text.
+- adds title to links
+- supports pandoc-style [fenced](https://pandoc.org/MANUAL.html#divs-and-spans) divs in goldmark.
+- supports github-style [callouts](https://github.com/orgs/community/discussions/16925) in goldmark.
 
 ## Full Demo
 
@@ -23,10 +25,6 @@ This [goldmark](http://github.com/yuin/goldmark) extension extend commonmark syn
 - [x] [dify.ai](https://dify.ai) Widget
 - [x] [Spotify](https://spotify.com) Embed
 - [x] html5 audio
-
-### Planned Objects
-
-- [ ] [Discord](https://discord.com) Server Widget
 
 ### Usage
 
@@ -94,9 +92,9 @@ Some objects support options:
 - `width` / `w` and `height` / `h`: The width and height of images. Default: `auto`
   - e.g. `![](https://your-image.com/image.png?w=100px)`
 
-## Highlight Text
+## Other features
 
-### Usage
+#### Highlight Text
 
 ```go
 import (
@@ -121,9 +119,7 @@ will be rendered as:
 <p>This is a <mark>highlighted text</mark>.</p>
 ```
 
-## Title to Links
-
-### Usage
+### Title to Links
 
 ```go
 import (
@@ -146,6 +142,36 @@ will be rendered as:
 
 ```html
 <a href="https://quaily.com/blog" title="Quail Blog">Quail</a>
+```
+
+### Pandoc-style Fenced Divs
+
+```go
+import (
+  enclaveFence "github.com/quailyquaily/goldmark-enclave/fence"
+	"github.com/yuin/goldmark"
+)
+// ...
+markdown := goldmark.New(
+  goldmark.WithExtensions(
+    enclaveFence.New(),
+  ),
+)
+```
+
+### Github-style Callouts
+
+```go
+import (
+  enclaveCallout "github.com/quailyquaily/goldmark-enclave/callout"
+	"github.com/yuin/goldmark"
+)
+// ...
+markdown := goldmark.New(
+  goldmark.WithExtensions(
+    enclaveCallout.New(),
+  ),
+)
 ```
 
 ## Installation
