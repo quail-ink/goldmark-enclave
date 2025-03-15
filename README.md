@@ -159,7 +159,7 @@ markdown := goldmark.New(
 )
 ```
 
-### Github-style Callouts
+### Callouts
 
 ```go
 import (
@@ -172,6 +172,26 @@ markdown := goldmark.New(
     enclaveCallout.New(),
   ),
 )
+```
+
+**Github-style**
+
+```md
+> [!NOTE]
+> This is a note callout.
+```
+
+**Simple**
+
+```md
+WARNING
+This is a warning callout.
+```
+
+**Simple Inline**
+
+```md
+WARNING: This is a warning callout.
 ```
 
 ## Installation
