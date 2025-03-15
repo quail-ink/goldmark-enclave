@@ -39,7 +39,7 @@ func (n *Callout) SetTitle(title string) {
 }
 
 // AppendContent appends content to the callout.
-func (n *Callout) AppendContent(content []byte) {
+func (n *Callout) SetContent(content []byte) {
 	n.content.Write(content)
 }
 
