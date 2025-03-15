@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"html"
+	"regexp"
 	"strings"
 
 	"github.com/yuin/goldmark"
@@ -58,17 +59,41 @@ func GetParagraphs(source []byte) []string {
 
 		if n.Kind() == ast.KindParagraph {
 			parent := n.Parent()
+
 			// Skip paragraphs inside blockquotes or code blocks
 			if parent != nil && (parent.Kind() == ast.KindBlockquote || parent.Kind() == ast.KindFencedCodeBlock) {
 				return ast.WalkContinue, nil
 			}
 
+			// check if the paragraph is a table or a table row
+			// | Header 1 | Header 2 | ... |
+			// | --- | --- | --- |
+			// | Row 1 | Row 2 | ... |
+			// | Row 2 | Row 2 | ... |
+			// ...
+			// @WORKAROUND: haven't figured out how to use extension ast to check if the paragraph is a table or a table row
+			// so we use regex
+			reRow := regexp.MustCompile(`^\|\s*`)
+			reDiv := regexp.MustCompile(`^\|\s*---+\s*\|`)
+
+			inTable := false
+
 			lines := n.Lines()
 			var paragraphText bytes.Buffer
 			for i := 0; i < lines.Len(); i++ {
 				line := lines.At(i)
-				paragraphText.Write(line.Value(source))
+				lineText := line.Value(source)
+				if reRow.Match(lineText) || reDiv.Match(lineText) {
+					inTable = true
+					break
+				}
+				paragraphText.Write(lineText)
 			}
+
+			if inTable {
+				return ast.WalkContinue, nil
+			}
+
 			paragraphs = append(paragraphs, paragraphText.String())
 		}
 
